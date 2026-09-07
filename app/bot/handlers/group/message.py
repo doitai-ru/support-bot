@@ -52,8 +52,10 @@ async def handler(message: Message) -> None:
     await message.delete()
 
 
-@router.message(F.media_group_id, F.from_user[F.is_bot.is_(False)])
-@router.message(F.media_group_id.is_(None), F.from_user[F.is_bot.is_(False)])
+# doitai: relay bot-authored replies too (AI bot in the same forum via Bot-to-Bot mode);
+# Telegram never delivers a bot its own messages, so there is no self-loop.
+@router.message(F.media_group_id)
+@router.message(F.media_group_id.is_(None))
 async def handler(message: Message, manager: Manager, redis: RedisStorage, album: Optional[Album] = None) -> None:
     """
     Handles user messages and sends them to the respective user.
