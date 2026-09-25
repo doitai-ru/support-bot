@@ -30,6 +30,9 @@ async def handler(message: Message, manager: Manager, redis: RedisStorage) -> No
 
     # Get the appropriate text based on the user's state
     text = manager.text_message.get("user_started_bot")
+    if manager.config.bot.AI_BOT_COMMANDS:
+        # doitai: the AI bot of this forum obeys /bot_off and /bot_on per topic.
+        text += "\n\n" + manager.text_message.get("ai_bot_commands")
 
     message = await message.bot.send_message(
         chat_id=manager.config.bot.GROUP_ID,
@@ -52,6 +55,21 @@ async def handler(message: Message) -> None:
     await message.delete()
 
 
+def is_operator_command(message: Message) -> bool:
+    """
+    doitai: commands in a topic are addressed to bots, not to the user — neither
+    the command itself nor a bot's reply to it is relayed (e.g. /bot_off for the
+    AI bot and its confirmation).
+    """
+    if (message.text or "").startswith("/"):
+        return True
+
+    reply = message.reply_to_message
+    from_bot = message.from_user is not None and message.from_user.is_bot
+
+    return from_bot and reply is not None and (reply.text or "").startswith("/")
+
+
 # doitai: relay bot-authored replies too (AI bot in the same forum via Bot-to-Bot mode);
 # Telegram never delivers a bot its own messages, so there is no self-loop.
 @router.message(F.media_group_id)
@@ -67,6 +85,9 @@ async def handler(message: Message, manager: Manager, redis: RedisStorage, album
     :param album: Album object or None.
     :return: None
     """
+    if is_operator_command(message):
+        return
+
     user_data = await redis.get_by_message_thread_id(message.message_thread_id)
     if not user_data: return None  # noqa
 

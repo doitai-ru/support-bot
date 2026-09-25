@@ -82,6 +82,16 @@ class TextMessage(Text):
                     "User information"
                     "<blockquote>Receive a message with basic information about the user.</blockquote>"
                 ),
+                "ai_bot_commands": (
+                    "AI assistant commands:\n\n"
+                    "• /bot_off\n"
+                    "Turn the AI off in this topic"
+                    "<blockquote>The AI stops answering this user; it turns back on by itself after 12 hours "
+                    "without operator messages.</blockquote>\n\n"
+                    "• /bot_on\n"
+                    "Turn the AI back on"
+                    "<blockquote>Commands and the AI's replies to them are not sent to the user.</blockquote>"
+                ),
                 "user_restarted_bot": f"User {hbold('{name}')} restarted the bot!",
                 "user_stopped_bot": f"User {hbold('{name}')} stopped the bot!",
                 "user_blocked": "<b>User blocked!</b> Messages from the user are not accepted.",
@@ -135,6 +145,16 @@ class TextMessage(Text):
                     "• /information\n"
                     "Информация о пользователе"
                     "<blockquote>Получить сообщение с основной информацией о пользователе.</blockquote>"
+                ),
+                "ai_bot_commands": (
+                    "Команды ИИ-ассистента:\n\n"
+                    "• /bot_off\n"
+                    "Выключить ИИ в этом топике"
+                    "<blockquote>ИИ перестаёт отвечать этому пользователю; включится сам через 12 часов "
+                    "без сообщений оператора.</blockquote>\n\n"
+                    "• /bot_on\n"
+                    "Включить ИИ обратно"
+                    "<blockquote>Команды и ответы ИИ на них пользователю не отправляются.</blockquote>"
                 ),
                 "user_restarted_bot": f"Пользователь {hbold('{name}')} перезапустил(а) бота!",
                 "user_stopped_bot": f"Пользователь {hbold('{name}')} остановил(а) бота!",

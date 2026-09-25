@@ -13,11 +13,14 @@ class BotConfig:
     - DEV_ID (int): The developer's user ID.
     - GROUP_ID (int): The group chat ID.
     - BOT_EMOJI_ID (str): The custom emoji ID for the group's topic.
+    - AI_BOT_COMMANDS (bool): doitai — an AI bot shares the forum (employee mode);
+      its /bot_off and /bot_on are listed in the topic welcome message.
     """
     TOKEN: str
     DEV_ID: int
     GROUP_ID: int
     BOT_EMOJI_ID: str
+    AI_BOT_COMMANDS: bool = False
 
 
 @dataclass
@@ -71,6 +74,7 @@ def load_config() -> Config:
             DEV_ID=env.int("BOT_DEV_ID"),
             GROUP_ID=env.int("BOT_GROUP_ID"),
             BOT_EMOJI_ID=env.str("BOT_EMOJI_ID"),
+            AI_BOT_COMMANDS=env.bool("AI_BOT_COMMANDS", False),
         ),
         redis=RedisConfig(
             HOST=env.str("REDIS_HOST"),
