@@ -57,17 +57,19 @@ async def handler(message: Message) -> None:
 
 def is_operator_command(message: Message) -> bool:
     """
-    doitai: commands in a topic are addressed to bots, not to the user — neither
-    the command itself nor a bot's reply to it is relayed (e.g. /bot_off for the
-    AI bot and its confirmation).
+    doitai: what bots say to operators is not for the user — neither a command
+    in a topic nor a bot's reply to a human's message is relayed (the AI bot
+    confirms /bot_off, suggests turning itself off with a button). The user's
+    own copies and the AI's answers reply to bot messages and are relayed.
     """
     if (message.text or "").startswith("/"):
         return True
 
     reply = message.reply_to_message
     from_bot = message.from_user is not None and message.from_user.is_bot
+    reply_from_human = reply is not None and reply.from_user is not None and not reply.from_user.is_bot
 
-    return from_bot and reply is not None and (reply.text or "").startswith("/")
+    return from_bot and reply_from_human
 
 
 # doitai: relay bot-authored replies too (AI bot in the same forum via Bot-to-Bot mode);
